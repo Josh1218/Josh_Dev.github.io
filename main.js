@@ -1,4 +1,6 @@
 (function () {
+  'use strict';
+
   var root = document.documentElement;
   var btn = document.getElementById('theme');
   var metaTheme = document.querySelector('meta[name="theme-color"]');
@@ -28,14 +30,18 @@
   }
 
   // Follow the device setting until the visitor picks a theme themselves.
-  var onSystemChange = function () {
-    if (!root.getAttribute('data-theme')) sync();
-  };
+  function onSystemChange() { if (!root.getAttribute('data-theme')) sync(); }
   if (darkQuery.addEventListener) darkQuery.addEventListener('change', onSystemChange);
   else if (darkQuery.addListener) darkQuery.addListener(onSystemChange);
 
+  // Footer year
   var year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
+
+  // Safety net: hide any link whose address is still the YOUR-USERNAME placeholder,
+  // so visitors never land on a broken page. Replace the URL in index.html to show it.
+  var placeholders = document.querySelectorAll('a[href*="YOUR-USERNAME"]');
+  for (var i = 0; i < placeholders.length; i++) placeholders[i].hidden = true;
 
   sync();
 })();
